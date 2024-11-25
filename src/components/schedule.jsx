@@ -2,7 +2,7 @@ import React from "react";
 
 const Schedule = () => {
     return (
-        int
+        <div>Schedule</div>
     )  
 };
 

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import "./style.scss"
 
@@ -11,14 +10,14 @@ import Schedule from "./components/schedule";
 import Tasks from "./components/tasks";
 
 import { AuthProvider } from './context/AuthContext';
-// import use routes
+import { useRoutes } from 'react-router-dom';
 
 function App() {
 
   const routesArray = [
     {
       path: "*",
-      element: <Home />,
+      element: <Login />,
     },
     {
       path: "/pomodoro",
@@ -45,19 +44,17 @@ function App() {
       element: <Home />,
     },
     {
-      path: "/upload",
-      element: <Upload/>,
-    },
-    {
-      path: "/header",
+      path: "/navbar",
       element: <Navbar />,
     },
   ];
 
+  let routesElement = useRoutes(routesArray);
   return (
     <div>
       <AuthProvider>
-        
+        <Navbar />
+        <div>{routesElement}</div>
       </AuthProvider>
     </div>
   );

@@ -2,7 +2,7 @@ import React from "react";
 
 const Pomo = () => {
     return (
-        int
+        <div>Pomo</div>
     )  
 };
 

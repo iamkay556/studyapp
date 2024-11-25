@@ -2,7 +2,7 @@ import React from "react";
 
 const Nav = () => {
     return (
-        int
+        <div>Nav</div>
     )  
 };
 
