@@ -1,8 +1,7 @@
-home - finish today
-login, register - done
-nav - finish today
-pomodoro, tasks, schedule - tmr
-
-- add css to login, register
-- make nav and home
-- add css
+login DONE
+register DONE
+nav DONE
+home DONE
+pomodoro
+schedule
+tasks
