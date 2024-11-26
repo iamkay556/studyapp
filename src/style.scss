@@ -525,6 +525,78 @@ body {
     }
 }
 
+// home--------------------------------------------------
+// --------------------------------------------------
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --bg-color: #000; /* Black background */
+  --text-color: #fff; /* White text */
+  --button-bg: #1f1f1f; /* Dark gray button background */
+  --button-hover: #444; /* Lighter gray for hover effect */
+  --accent-color: #fcb03f; /* Golden accent for buttons */
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.homepage-content {
+  max-width: 600px;
+}
+
+.homepage-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+}
+
+.homepage-description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.homepage-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.homepage-button {
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.homepage-button:hover {
+  background-color: var(--button-hover);
+  color: var(--accent-color);
+}
+
+
+
+
 
 // .headernav {
 //     position: fixed;

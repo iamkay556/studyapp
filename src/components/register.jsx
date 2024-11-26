@@ -40,7 +40,7 @@ const Register = () => {
     return (
 
         <div className='formContainer'>
-            {userLoggedIn && (<Navigate to={'/pomodoro'} replace={true} />)}
+            {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
             {/* <div className="auth-blob"></div> */}
             {/* change these colors and shapes to like squares */}
             <div className='auth-blob'></div>
