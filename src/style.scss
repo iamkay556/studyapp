@@ -361,7 +361,51 @@ $background: rgba(17, 21, 24, 0.85);
 }
 
 
-.headernav {
+// navbar -----------------------------------------------------------------------
+//  --------------------------------------------------------------------------
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+    --bg-dark: rgb(24, 24, 24);
+    --bg-light: #e4e4e4;
+    --text-color: #fff;
+    --hover-bg: #f4f4f4;
+    --hover-text: #000;
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+    //   background-image: linear-gradient(
+    //     to right top,
+    //     #d16ba5,
+    //     #c777b9,
+    //     #ba83ca,
+    //     #aa8fd8,
+    //     #9a9ae1,
+    //     #8aa7ec,
+    //     #79b3f4,
+    //     #69bff8,
+    //     #52cffe,
+    //     #41dfff,
+    //     #46eefa,
+    //     #5ffbf1
+    //   );
+    background-color: rgb(14, 1, 1);
+    color: white;
+    min-height: 100vh;
+}
+
+/* Navbar Styles */
+.navbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -370,78 +414,199 @@ $background: rgba(17, 21, 24, 0.85);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80px;
-    padding: 0 2rem;
-    background-color: rgba(0, 38, 77, 0);
-    /* Dark Blue */
-    color: #b0c6de;
-    /* Lightgrayish Blue */
+    padding: 1rem 2rem;
+    background-color: rgba(24, 24, 24, 0.9);
+    color: var(--text-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: backdrop-filter 0.3s ease-in-out;
 }
 
 .nav-blur {
-    backdrop-filter: blur(20px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
-.nav a {
-    margin: 0 1rem;
-    color: #b0c6de;
-    /* Lightgrayish Blue */
-    text-decoration: none;
-}
-
-.nav a:hover {
-    color: gray;
-}
-
-.navlink-a,
-.navlink-b,
-.navlink-logout {
-    font-size: 1.4rem;
-    color: white;
-    text-decoration: none;
-}
-
-.navlink-logout {
-    background-color: #12325c;
-    /* Dark Blue */
-    padding: 8px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.navlink-logout:hover {
-    background-color: #0a1f3d;
-    /* Darker Blue */
-}
-
+/* Logo Styles */
 .logoimg {
-    width: 147.48px;
-    height: 48.6px;
-    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
 }
 
-.input {
-    background-color: #12325c;
-    /* Dark Blue */
-    height: 100vh;
+/* Navigation Links */
+.nav-links {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
+    gap: 1.5rem;
+}
 
-    img {
-        padding: 5px;
-        width: 50px;
+.nav-link {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: var(--hover-bg);
+        color: var(--hover-text);
     }
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1f1f47;
+.navlink-logout {
+    background-color: rgba(255, 69, 58, 0.9);
+    /* Slightly red logout button */
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: rgba(255, 69, 58, 1);
+        color: var(--hover-text);
+    }
 }
+
+/* Mobile Styles */
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.hide-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 70%;
+        height: 100%;
+        background-color: var(--bg-dark);
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2rem;
+        padding: 2rem;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+
+    .nav-links.show {
+        transform: translateX(0);
+    }
+
+    .nav-links.hide {
+        transform: translateX(100%);
+    }
+
+    .hide-toggle {
+        display: block;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .logoimg {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+}
+
+
+// .headernav {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     z-index: 100;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     height: 80px;
+//     padding: 0 2rem;
+//     background-color: rgba(0, 38, 77, 0);
+//     /* Dark Blue */
+//     color: #b0c6de;
+//     /* Lightgrayish Blue */
+//     transition: backdrop-filter 0.3s ease-in-out;
+// }
+
+// .nav-blur {
+//     backdrop-filter: blur(20px);
+//     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+// }
+
+// .nav a {
+//     margin: 0 1rem;
+//     color: #b0c6de;
+//     /* Lightgrayish Blue */
+//     text-decoration: none;
+// }
+
+// .nav a:hover {
+//     color: gray;
+// }
+
+// .navlink-a,
+// .navlink-b,
+// .navlink-logout {
+//     font-size: 1.4rem;
+//     color: white;
+//     text-decoration: none;
+// }
+
+// .navlink-logout {
+//     background-color: #12325c;
+//     /* Dark Blue */
+//     padding: 8px 20px;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+// }
+
+// .navlink-logout:hover {
+//     background-color: #0a1f3d;
+//     /* Darker Blue */
+// }
+
+// .logoimg {
+//     width: 147.48px;
+//     height: 48.6px;
+//     border-radius: 8px;
+// }
+
+// .input {
+//     background-color: #12325c;
+//     /* Dark Blue */
+//     height: 100vh;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     position: relative;
+//     overflow: hidden;
+
+//     img {
+//         padding: 5px;
+//         width: 50px;
+//     }
+// }
+
+// body {
+//     font-family: 'Roboto', sans-serif;
+//     margin: 0;
+//     padding: 0;
+//     background-color: #1f1f47;
+// }

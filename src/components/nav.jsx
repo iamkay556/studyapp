@@ -33,51 +33,33 @@ const Header = () => {
     }, []);
 
     return (
-        <header className={`headernav ${isScrolled ? 'nav-blur' : ''}`}>
-            {userLoggedIn ? (
-                <nav className="headernav">
-                    <div>
-                        <div>STUDY APP BY KAY</div>
-                    </div>
-                    <div
-                        className="navlink"
-                        style={{ cursor: 'pointer', color: 'white', margin: '0 10px' }}
-                        onClick={() => navigate('/home')}
-                    >
-                        Home
-                    </div>
-                    <div
-                        className="navlink"
-                        style={{ cursor: 'pointer', color: 'white', margin: '0 10px' }}
-                        onClick={() => navigate('/pomodoro')}
-                    >
-                        Pomodoro
-                    </div>
-                    <div
-                        className="navlink"
-                        style={{ cursor: 'pointer', color: 'white', margin: '0 10px' }}
-                        onClick={() => navigate('/schedule')}
-                    >
-                        Schedule
-                    </div>
-                    <div
-                        className="navlink"
-                        style={{ cursor: 'pointer', color: 'white', margin: '0 10px' }}
-                        onClick={() => navigate('/tasks')}
-                    >
-                        Tasks
-                    </div>
-                    <div className="navlink-logout" onClick={handleLogout}>
-                        Logout
-                    </div>
-                </nav>
-            ) : (
-                <nav className="headernav">
-                    <div>
-                        <div>STUDY APP BY KAY</div>
-                    </div>
-                </nav>
-            )}
+        <header className={`navbar ${isScrolled ? 'nav-blur' : ''}`}>
+            <div className="menu-toggle">☰</div>
+            <nav className={`nav-links ${isScrolled ? 'show' : 'hide'}`}>
+                <div className="logoimg">STUDY APP BY KAY</div>
+                {userLoggedIn ? (
+                    <>
+                        <div className="nav-link" onClick={() => navigate('/home')}>
+                            Home
+                        </div>
+                        <div className="nav-link" onClick={() => navigate('/pomodoro')}>
+                            Pomodoro
+                        </div>
+                        <div className="nav-link" onClick={() => navigate('/schedule')}>
+                            Schedule
+                        </div>
+                        <div className="nav-link" onClick={() => navigate('/tasks')}>
+                            Tasks
+                        </div>
+                        <div className="nav-link navlink-logout" onClick={handleLogout}>
+                            Logout
+                        </div>
+                    </>
+                ) : (
+                    <div className="nav-link" onClick={() => navigate('/login')}>Please log in</div>
+                )}
+                <div className="hide-toggle">✖</div>
+            </nav>
         </header>
     );
 };
