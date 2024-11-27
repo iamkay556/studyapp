@@ -5,14 +5,13 @@ const Pomo = () => {
     const [time, setTime] = useState(60 * 60); 
     const [isRunning, setIsRunning] = useState(false); 
     const [showSettings, setShowSettings] = useState(false); 
+    const [currentSession, setCurrentSession] = useState("work");
 
     const [settings, setSettings] = useState({ 
         work: 60,          
         shortBreak: 10,
         longBreak: 30,
     });
-
-    const [popupWindow, setPopupWindow] = useState(null);
 
     useEffect(() => { 
         let interval;
@@ -60,9 +59,37 @@ const Pomo = () => {
         return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`; // leading 0s
     };
 
+    const switchSession = (direction) => {
+        if (direction === "next") {
+            if (currentSession === "work") {
+                setCurrentSession("shortBreak");
+                setTime(settings.shortBreak * 60);
+            } else if (currentSession === "shortBreak") {
+                setCurrentSession("longBreak");
+                setTime(settings.longBreak * 60);
+            } else if (currentSession === "longBreak") {
+                setCurrentSession("work");
+                setTime(settings.work * 60);
+            }
+        } else if (direction === "prev") {
+            if (currentSession === "work") {
+                setCurrentSession("longBreak");
+                setTime(settings.longBreak * 60);
+            } else if (currentSession === "shortBreak") {
+                setCurrentSession("work");
+                setTime(settings.work * 60);
+            } else if (currentSession === "longBreak") {
+                setCurrentSession("shortBreak");
+                setTime(settings.shortBreak * 60);
+            }
+        }
+        setIsRunning(false);
+    };
+
     return ( 
         <div className="pomodoro-container">
             <h1 className="pomodoro-title">Pomodoro Timer</h1> 
+            <h2 className="current-session">Current Session: {currentSession}</h2>
             
             <div className="timer-display">{formatTime(time)}</div> 
             
@@ -75,6 +102,15 @@ const Pomo = () => {
                 </button>
                 <button className="control-button" onClick={openSettings}>
                     Settings 
+                </button>
+            </div>
+
+            <div className="session-switcher">
+                <button className="arrow-button" onClick={() => switchSession("prev")}>
+                    ← Previous
+                </button>
+                <button className="arrow-button" onClick={() => switchSession("next")}>
+                    Next →
                 </button>
             </div>
 

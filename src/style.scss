@@ -384,27 +384,11 @@ $background: rgba(17, 21, 24, 0.85);
 
 body {
     overflow-x: hidden;
-    //   background-image: linear-gradient(
-    //     to right top,
-    //     #d16ba5,
-    //     #c777b9,
-    //     #ba83ca,
-    //     #aa8fd8,
-    //     #9a9ae1,
-    //     #8aa7ec,
-    //     #79b3f4,
-    //     #69bff8,
-    //     #52cffe,
-    //     #41dfff,
-    //     #46eefa,
-    //     #5ffbf1
-    //   );
     background-color: rgb(14, 1, 1);
     color: white;
     min-height: 100vh;
 }
 
-/* Navbar Styles */
 .navbar {
     position: fixed;
     top: 0;
@@ -425,14 +409,12 @@ body {
     backdrop-filter: blur(10px);
 }
 
-/* Logo Styles */
 .logoimg {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--text-color);
 }
 
-/* Navigation Links */
 .nav-links {
     display: flex;
     gap: 1.5rem;
@@ -454,7 +436,6 @@ body {
 
 .navlink-logout {
     background-color: rgba(255, 69, 58, 0.9);
-    /* Slightly red logout button */
     color: var(--text-color);
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -466,7 +447,6 @@ body {
     }
 }
 
-/* Mobile Styles */
 .menu-toggle {
     display: none;
     font-size: 1.5rem;
@@ -481,7 +461,6 @@ body {
     color: var(--text-color);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
@@ -698,6 +677,35 @@ body {
     background-color: #333;
     color: white;
     padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #555;
+    }
+
+}
+.session-switcher {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    top: -137px;
+    left: -10px;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+
+.arrow-button {
+    background-color: #333;
+    margin: 0 10px;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: .7rem;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
