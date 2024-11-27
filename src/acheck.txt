@@ -1,7 +1,7 @@
 login DONE
 register DONE
 nav DONE
-home 
-pomodoro
+home DONE
+pomodoro DONE
 schedule
 tasks
