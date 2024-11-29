@@ -3,57 +3,70 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const TaskBoard = () => {
     const [columns, setColumns] = useState({
-        todo: [
-            { id: "task-1", content: "Task 1" },
-            { id: "task-2", content: "Task 2" },
-        ],
-        inProgress: [
-            { id: "task-3", content: "Task 3" }
-        ],
-        done: [
-            { id: "task-4", content: "Task 4" }
-        ],
+        // add columns here
     });
 
     const [newColumnName, setNewColumnName] = useState("");
 
     const onDragEnd = (result) => {
-        const { destination, source } = result;
+        const { source, destination } = result;
 
-        if (!destination) return; // if no shift, do nothing
+        if (!destination) return; // if no drop, do nothing
 
-        const sourceColumn = [...columns[source.droppableId]];
-        const destColumn = [...columns[destination.droppableId]];
-        const [movedTask] = sourceColumn.splice(source.index, 1);
+        const sourceColumnId = source.droppableId;
+        const destColumnId = destination.droppableId;
 
-        destColumn.splice(destination.index, 0, movedTask); // remove task from original column
+        if (sourceColumnId === destColumnId) {
+            // moving in same column
+            const column = Array.from(columns[sourceColumnId]); // clone column
+            const [movedTask] = column.splice(source.index, 1); // remove task
+            column.splice(destination.index, 0, movedTask); // add task
 
-        setColumns({
-            ...columns, // keep cols unchanged
-            [source.droppableId]: sourceColumn,
-            [destination.droppableId]: destColumn,
-        });
+            setColumns({ // update column
+                ...columns,
+                [sourceColumnId]: column,
+            });
+        } else {
+            // diff column
+            const sourceColumn = Array.from(columns[sourceColumnId]); // same clone with 2 columns
+            const destColumn = Array.from(columns[destColumnId]);
+            const [movedTask] = sourceColumn.splice(source.index, 1);
+            destColumn.splice(destination.index, 0, movedTask);
+
+            setColumns({
+                ...columns,
+                [sourceColumnId]: sourceColumn,
+                [destColumnId]: destColumn,
+            });
+        }
     };
 
     const handleTaskChange = (columnId, taskId, newContent) => {
         setColumns({
             ...columns,
-            [columnId]: columns[columnId].map((task) => // updates task
-                task.id === taskId ? { ...task, content: newContent } : task
+            [columnId]: columns[columnId].map((task) =>
+                task.id === taskId ? { ...task, content: newContent } : task // update content iff id match
             ),
         });
     };
 
     const addTask = (columnId, content) => {
-        if (content) {
+        if (content.trim()) { // task content not empty
             setColumns({
                 ...columns,
-                [columnId]: [ // adds to 1 column
+                [columnId]: [
                     ...columns[columnId],
-                    { id: Date.now().toString(), content }, // random id
+                    { id: `task-${Date.now()}`, content },
                 ],
             });
         }
+    };
+
+    const deleteTask = (columnId, taskId) => {
+        setColumns({
+            ...columns,
+            [columnId]: columns[columnId].filter((task) => task.id !== taskId),
+        });
     };
 
     const addColumn = () => {
@@ -66,20 +79,34 @@ const TaskBoard = () => {
         }
     };
 
+    const deleteColumn = (columnId) => {
+        const updatedColumns = { ...columns }; // clone and remove and update
+        delete updatedColumns[columnId];
+        setColumns(updatedColumns);
+    };
+
     return (
         <div className="task-board-container">
-            <DragDropContext onDragEnd={onDragEnd}>
+            <DragDropContext onDragEnd={onDragEnd}> 
                 <div className="board">
-                    {Object.entries(columns).map(([columnId, tasks]) => (
+                    {Object.entries(columns).map(([columnId, tasks]) => ( {/* iterate columns n make them droppable areas*/},
                         <Droppable droppableId={columnId} key={columnId}>
                             {(provided) => (
                                 <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
+                                    ref={provided.innerRef} // add droppable ref
+                                    {...provided.droppableProps} 
                                     className="column"
                                 >
-                                    <h2 className="column-title">{columnId}</h2>
-                                    {tasks.map((task, index) => (
+                                    <div className="column-header">
+                                        <h2 className="column-title">{columnId}</h2> 
+                                        <button
+                                            className="delete-column-button"
+                                            onClick={() => deleteColumn(columnId)}
+                                        >
+                                            ✖
+                                        </button>
+                                    </div>
+                                    {tasks.map((task, index) => ( {/* iterate tasks n make them draggable objects*/},
                                         <Draggable
                                             key={task.id}
                                             draggableId={task.id}
@@ -104,6 +131,12 @@ const TaskBoard = () => {
                                                         }
                                                         className="task-input"
                                                     />
+                                                    <button
+                                                        className="delete-task-button"
+                                                        onClick={() => deleteTask(columnId, task.id)}
+                                                    >
+                                                        ✖
+                                                    </button>
                                                 </div>
                                             )}
                                         </Draggable>
@@ -115,10 +148,7 @@ const TaskBoard = () => {
                                             placeholder="Add task..."
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
-                                                    addTask(
-                                                        columnId,
-                                                        e.target.value
-                                                    );
+                                                    addTask(columnId, e.target.value);
                                                     e.target.value = "";
                                                 }
                                             }}
