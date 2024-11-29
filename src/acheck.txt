@@ -3,5 +3,5 @@ register DONE
 nav DONE
 home DONE
 pomodoro DONE
-schedule
-tasks
+schedule maybe
+tasks DONE
