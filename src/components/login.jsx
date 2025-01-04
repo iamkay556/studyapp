@@ -33,7 +33,6 @@ const Login = () => {
     return (
         <div className='formContainer'>
             {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
-            <div className='auth-blob'></div>
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet"></link>
     
             <div className='formWrapper'>

@@ -25,7 +25,7 @@ const Pomo = () => {
         return () => clearInterval(interval); 
     }, [isRunning]);
 
-    const toggleTimer = () => { 
+    const toggleTimer = () => {
         setIsRunning(!isRunning);
     };
 

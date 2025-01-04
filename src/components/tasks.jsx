@@ -1,12 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { db } from '../firebase';
+import { collection, setDoc, getDocs, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const TaskBoard = () => {
-    const [columns, setColumns] = useState({
-        // add columns here
-    });
+    const { currentUser } = useAuth();
+    const navigate = useNavigate();
 
+    const [columns, setColumns] = useState({
+        // can add initial colunms here
+    });
     const [newColumnName, setNewColumnName] = useState("");
+
+    useEffect(() => {
+        if (!currentUser) {
+            navigate("/login");
+        }
+    }, [currentUser, navigate]);
+
+    useEffect(() => {
+        if (currentUser) {
+            const fetchTasks = async () => {
+                const querySnapshot = await getDocs(collection(db, "tasks", currentUser.uid, "userTasks"));
+                const userTasks = {};
+                querySnapshot.forEach((doc) => {
+                    userTasks[doc.id] = doc.data().tasks;
+                });
+                setColumns(userTasks);
+            };
+
+            fetchTasks();
+        }
+    }, [currentUser]);
 
     const onDragEnd = (result) => {
         const { source, destination } = result;
@@ -28,8 +55,8 @@ const TaskBoard = () => {
             });
         } else {
             // diff column
-            const sourceColumn = Array.from(columns[sourceColumnId]); // same clone with 2 columns
-            const destColumn = Array.from(columns[destColumnId]);
+            const sourceColumn = Array.from(columns[sourceColumnId]); // clone source column
+            const destColumn = Array.from(columns[destColumnId]); // clone destination column
             const [movedTask] = sourceColumn.splice(source.index, 1);
             destColumn.splice(destination.index, 0, movedTask);
 
@@ -41,64 +68,76 @@ const TaskBoard = () => {
         }
     };
 
-    const handleTaskChange = (columnId, taskId, newContent) => {
-        setColumns({
-            ...columns,
-            [columnId]: columns[columnId].map((task) =>
-                task.id === taskId ? { ...task, content: newContent } : task // update content iff id match
-            ),
+    const handleTaskChange = async (columnId, taskId, newContent) => {
+        if (!currentUser) return;
+
+        const updatedTasks = columns[columnId].map((task) =>
+            task.id === taskId ? { ...task, content: newContent } : task
+        );
+
+        await updateDoc(doc(db, "tasks", currentUser.uid, "userTasks", columnId), {
+            tasks: updatedTasks,
         });
+
+        setColumns({ ...columns, [columnId]: updatedTasks });
     };
 
-    const addTask = (columnId, content) => {
-        if (content.trim()) { // task content not empty
-            setColumns({
-                ...columns,
-                [columnId]: [
-                    ...columns[columnId],
-                    { id: `task-${Date.now()}`, content },
-                ],
-            });
-        }
-    };
+    const addTask = async (columnId, content) => {
+        if (!currentUser || !content.trim()) return;
 
-    const deleteTask = (columnId, taskId) => {
-        setColumns({
-            ...columns,
-            [columnId]: columns[columnId].filter((task) => task.id !== taskId),
+        const task = { id: `task-${Date.now()}`, content };
+        const updatedColumn = [...columns[columnId], task];
+
+        await updateDoc(doc(db, "tasks", currentUser.uid, "userTasks", columnId), {
+            tasks: updatedColumn,
         });
+
+        setColumns({ ...columns, [columnId]: updatedColumn });
     };
 
-    const addColumn = () => {
-        if (newColumnName.trim()) {
-            setColumns({
-                ...columns,
-                [newColumnName]: [],
-            });
-            setNewColumnName("");
-        }
+    const deleteTask = async (columnId, taskId) => {
+        if (!currentUser) return;
+
+        const updatedTasks = columns[columnId].filter((task) => task.id !== taskId);
+
+        await updateDoc(doc(db, "tasks", currentUser.uid, "userTasks", columnId), {
+            tasks: updatedTasks,
+        });
+
+        setColumns({ ...columns, [columnId]: updatedTasks });
     };
 
-    const deleteColumn = (columnId) => {
-        const updatedColumns = { ...columns }; // clone and remove and update
+    const addColumn = async () => {
+        if (!currentUser || !newColumnName.trim()) return;
+
+        await setDoc(doc(db, "tasks", currentUser.uid, "userTasks", newColumnName), { tasks: [] });
+        setColumns({ ...columns, [newColumnName]: [] });
+        setNewColumnName("");
+    };
+
+    const deleteColumn = async (columnId) => {
+        if (!currentUser) return;
+
+        await deleteDoc(doc(db, "tasks", currentUser.uid, "userTasks", columnId));
+        const updatedColumns = { ...columns };
         delete updatedColumns[columnId];
         setColumns(updatedColumns);
     };
 
     return (
         <div className="task-board-container">
-            <DragDropContext onDragEnd={onDragEnd}> 
+            <DragDropContext onDragEnd={onDragEnd}>
                 <div className="board">
-                    {Object.entries(columns).map(([columnId, tasks]) => ( {/* iterate columns n make them droppable areas*/},
+                    {Object.entries(columns).map(([columnId, tasks]) => (
                         <Droppable droppableId={columnId} key={columnId}>
                             {(provided) => (
                                 <div
                                     ref={provided.innerRef} // add droppable ref
-                                    {...provided.droppableProps} 
+                                    {...provided.droppableProps}
                                     className="column"
                                 >
                                     <div className="column-header">
-                                        <h2 className="column-title">{columnId}</h2> 
+                                        <h2 className="column-title">{columnId}</h2>
                                         <button
                                             className="delete-column-button"
                                             onClick={() => deleteColumn(columnId)}
@@ -106,7 +145,7 @@ const TaskBoard = () => {
                                             ✖
                                         </button>
                                     </div>
-                                    {tasks.map((task, index) => ( {/* iterate tasks n make them draggable objects*/},
+                                    {tasks.map((task, index) => ( {/* iterate tasks n make them draggable objects*/ },
                                         <Draggable
                                             key={task.id}
                                             draggableId={task.id}

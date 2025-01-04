@@ -17,9 +17,9 @@ const Home = () => {
     return (
         <div className="homepage-container">
             <div className="homepage-content">
-                <h1 className="homepage-title">STUDY APP BY KAY</h1>
+                <h1 className="homepage-title">STUDY APP</h1>
                 <p className="homepage-description">
-                    Made for study.
+                    lock in??
                 </p>
                 <div className="homepage-buttons">
                     <button

@@ -36,7 +36,7 @@ const Header = () => {
         <header className={`navbar ${isScrolled ? 'nav-blur' : ''}`}>
             <div className="menu-toggle">☰</div>
             <nav className={`nav-links ${isScrolled ? 'show' : 'hide'}`}>
-                <div className="logoimg">STUDY APP BY KAY</div>
+                <div className="logoimg">STUDY APP</div>
                 {userLoggedIn ? (
                     <>
                         <div className="nav-link" onClick={() => navigate('/home')}>
